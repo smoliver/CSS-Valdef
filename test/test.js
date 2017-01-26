@@ -25,27 +25,45 @@ describe ('CSSValdef', function () {
       assert.equal (CSSValdef.format(misleadingSyntax), propperSyntax);
     });
   });
+
   // Testing for the Validate Layout Function
-  describe ('validate', function (){
+  describe ('Validate Format', function (){
     // Test Propper spacing
     it ('Should throw an impropper CSS Value Definition syntax error', function () {
       let squishedSyntax = '[ [ left|| right ] && <length> | <width> ] | inherit'
       let caughtErrorMessage = /Impropper CSS Value Definition syntax/;
-      assert.throws (CSSValdef.validate.bind (this, squishedSyntax), caughtErrorMessage, 
+      assert.throws (CSSValdef.validateFormat.bind (this, squishedSyntax), caughtErrorMessage, 
         `\n     Impropper syntax not raising error:\n\t${squishedSyntax}`);
     });
     it ('Should not throw an error', function () {
       let propperSyntax = '[ [ left || right ] && <length> | <width> ] | inherit';
-      assert.doesNotThrow (CSSValdef.validate.bind (this, propperSyntax), 
+      assert.doesNotThrow (CSSValdef.validateFormat.bind (this, propperSyntax), 
         `\n     Propper syntax raising unexpected error\n\t${propperSyntax}`)
     });
   })
+
   // Testing for the Validate Variables Function
-  describe ('Validate Variable Names', function (){
+  describe ('Validate Variables', function (){
     let errorDescription = `\n     Impropper variable name not raising error:`
-    let thrownError = /Invalid Variables/;
-    it ('Should throw an error for empty variable names', function () {
+    let falseErrorDescription = `\n     Propper variable name raising errors`
+    let thrownError = /Variable Name Error::/;
+    
+    // Validate that empty variables raise errors
+    it ('Should throw an error for empty names', function () {
       assert.throws (CSSValdef.validateVariables.bind (this, '<>'), thrownError, errorDescription)
-    })
+      assert.throws (CSSValdef.validateVariables.bind (this, '<\'\'>'), thrownError, errorDescription)
+      assert.throws (CSSValdef.validateVariables.bind (this, '<\"\">'), thrownError, errorDescription)
+    });
+
+    // Test for incomplete quotes
+    it ('Should throw an error for names comprised of incomplete quotes');
+
+    // Test for bad characters
+    it ('Should throw an error if an invalid character is used');
+
+    // Test to make sure good variables are not triggering errors
+    it ('Should not throw an error for valid variable names');
+
+
   })
 });
